@@ -54,6 +54,20 @@ The 16 calibration points re-project with an RMS error of 14 px on a 2747-px-wid
 
 ---
 
+### [Homework 4 — Calibrating a Camera from a Single Image](Homework_4/README.md)
+
+Given one image of a single box of known size — 8 × 6 × 6 m, origin on a corner — and nothing else, work out the camera that took it: its lens, its orientation, and where in the world it was standing.
+
+This is the reverse of everything before it. Homework 1 *used* a camera matrix, Homework 3 recovered one from 3D↔2D point pairs; here there are **no 3D coordinates at all**, only three flat faces of known shape. The write-up covers **Zhang's method**: each face gives a homography (Homework 2), and because a homography's first two columns must come from a **rotation matrix** — perpendicular and equal in length — every face pins down two constraints on the lens. Expressed through the **Image of the Absolute Conic** `ω = K⁻ᵀK⁻¹`, those constraints become linear, so three faces give six equations for `ω`'s six unknowns, and a Cholesky decomposition turns `ω` back into `K`.
+
+📄 **[Read the full write-up →](Homework_4/README.md)**
+
+Against the ground truth the sheet supplies for checking, both focal lengths come out within **0.12%** and the recovered camera direction within **0.09°** — while the *distance* lands 2.15× too far, a pure scale error the write-up traces to where scale enters the method.
+
+![The seven picked box corners](Homework_4/reference_points.png)
+
+---
+
 ## Tooling
 
 Python, in Jupyter notebooks, using **NumPy** (matrix maths), **OpenCV** (`opencv-python`, for image I/O and drawing) and **Matplotlib** (inline display).
@@ -62,4 +76,4 @@ Python, in Jupyter notebooks, using **NumPy** (matrix maths), **OpenCV** (`openc
 pip install numpy opencv-python matplotlib
 ```
 
-Homework 3 additionally uses **MeshLab** as an external tool — to pick 3D vertex coordinates off the scan, and to view the resulting coloured point cloud.
+Two external tools appear alongside: **MeshLab** in Homework 3, to pick 3D vertex coordinates off the scan and to view the resulting coloured point cloud, and **Blender** in Homework 4, which rendered the input image and is included as a reference scene.
