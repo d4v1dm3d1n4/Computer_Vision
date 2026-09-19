@@ -38,6 +38,22 @@ Because a homography is invertible, the same matrix does both halves of the swap
 
 ---
 
+### [Homework 3 — Casting Photo Colour onto a 3D Model](Homework_3/README.md)
+
+Given a photo of a garden gnome and a 381,613-vertex 3D scan of the same object, recover the camera that took the photo, re-project every vertex of the model into the image to find out what colour it should be, and write the model back out as a coloured point cloud.
+
+This closes the loop on Homework 1. There, the camera matrix `K[R|T]` was **given** and used to project points; here the matrix — now written as a single 3×4 **projection matrix `P`** — is the **unknown**, recovered from 16 hand-picked 2D↔3D correspondences. Because a projection matrix has 11 degrees of freedom and every correspondence supplies two equations, 16 pairs make the system heavily over-determined, so it is solved by **SVD** as a least-squares fit rather than by the exact matrix inverse Homework 2 could use. The write-up covers why the homogeneous system `Ap = 0` needs the smallest singular vector, and how the scan's **vertex normals** are used to reject the half of the model facing away from the camera — otherwise points on the gnome's back would be painted with his face.
+
+📄 **[Read the full write-up →](Homework_3/README.md)**
+
+The 16 calibration points re-project with an RMS error of 14 px on a 2747-px-wide image, and 192,398 of the 381,613 vertices survive back-face culling. From the camera's own viewpoint the result is seamless; rotating it exposes the method's limits — green streaks where silhouette vertices sampled the backdrop, and holes where the culling correctly refused to invent colour for surfaces the photo never saw.
+
+| Input photo + the 16 picked points | Result — front | Result — rotated |
+|---|---|---|
+| ![The 16 picked correspondences](Homework_3/reference_points.png) | ![Coloured point cloud, front](Homework_3/FinalResult_front.png) | ![Coloured point cloud, rotated](Homework_3/FinalResult_right.png) |
+
+---
+
 ## Tooling
 
 Python, in Jupyter notebooks, using **NumPy** (matrix maths), **OpenCV** (`opencv-python`, for image I/O and drawing) and **Matplotlib** (inline display).
@@ -45,3 +61,5 @@ Python, in Jupyter notebooks, using **NumPy** (matrix maths), **OpenCV** (`openc
 ```bash
 pip install numpy opencv-python matplotlib
 ```
+
+Homework 3 additionally uses **MeshLab** as an external tool — to pick 3D vertex coordinates off the scan, and to view the resulting coloured point cloud.
