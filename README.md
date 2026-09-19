@@ -22,6 +22,22 @@ The result is verified visually: the first trajectory point lands exactly on the
 
 ---
 
+### [Homework 2 — Swapping Two Photo Frames with a Homography](Homework_2/README.md)
+
+Given a single photo of an art gallery holding two picture frames — one large, close and turned away from the camera, the other small, distant and nearly frontal — estimate the projective transform between them from four hand-picked corner pairs and swap the paintings, so each one hangs in the other's frame with the correct new perspective.
+
+Where Homework 1 went from 3D to 2D, this one stays in the image plane and exploits a different fact: **both paintings are flat**. Any two views of the same plane are related by a single 3×3 **homography** — the most general transform that still maps straight lines to straight lines, with **8 degrees of freedom** rather than 9, because homogeneous coordinates are only defined up to scale. The write-up covers the transform hierarchy (translation → Euclidean → similarity → affine → homography), the **Direct Linear Transform** that turns the non-linear mapping into a solvable 8×8 linear system, why four point pairs are exactly enough, and the bitwise-mask compositing trick that drops a warped image into a hand-defined region.
+
+Because a homography is invertible, the same matrix does both halves of the swap: `H` sends the left painting right, and `H⁻¹` sends the right painting left.
+
+📄 **[Read the full write-up →](Homework_2/README.md)**
+
+| Original | Paintings swapped |
+|---|---|
+| ![Original gallery](Homework_2/Swap_ArtGallery.jpg) | ![Paintings swapped](Homework_2/F11115117.jpg) |
+
+---
+
 ## Tooling
 
 Python, in Jupyter notebooks, using **NumPy** (matrix maths), **OpenCV** (`opencv-python`, for image I/O and drawing) and **Matplotlib** (inline display).
