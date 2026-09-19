@@ -90,6 +90,24 @@ Ground-truth mesh beside the reconstruction — recognisable head-on, and reveal
 
 ---
 
+## Final Project
+
+### [3D Reconstruction from Stereoscopic Images](FinalProject/README.md)
+
+The other 20% of the final grade, and the course's destination. 179 side-by-side frames — two views of every moment — follow a blue laser line sweeping down a garden gnome, the same statue Homework 3 painted. Both cameras are fully calibrated and the fundamental matrix is given. Rebuild the gnome as a **colour** 3D point cloud.
+
+This is real stereo at last, and it brings the problem every earlier assignment avoided: **correspondence**. Which pixel in the right image is the same physical point as this one in the left? The **epipolar constraint** is what makes it tractable — a pixel and the two camera centres define a plane, so the match must lie on the *line* where that plane cuts the other image, and `l' = Fx` produces that line in one multiplication. A 2D search becomes a walk along a line. **Direct triangulation** then solves `AX = 0` by SVD — the third assignment running where the answer is "make it a homogeneous linear system and take the last column of `V`" — and the residual `‖AX‖`, which measures how badly the two rays miss each other, doubles as the outlier test the brief requires.
+
+📄 **[Read the full write-up →](FinalProject/README.md)**
+
+**93,656 points**, a mean **1.37 mm** from the ground-truth mesh. The one hole is the hat, and it is physics rather than code: a blue laser on red pigment reflects almost nothing, so there is no line left to detect.
+
+| Ground truth | Reconstruction | Cloud over the mesh |
+|---|---|---|
+| ![Ground truth mesh](FinalProject/groundTruth.png) | ![Reconstructed point cloud](FinalProject/pointCloudResult.png) | ![Cloud over mesh](FinalProject/pointCloud_over_groundTruth.png) |
+
+---
+
 ## Tooling
 
 Python, in Jupyter notebooks, using **NumPy** (matrix maths), **OpenCV** (`opencv-python`, for image I/O and drawing) and **Matplotlib** (inline display).
