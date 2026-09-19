@@ -68,6 +68,28 @@ Against the ground truth the sheet supplies for checking, both focal lengths com
 
 ---
 
+## Midterm Project
+
+### [3D Scanning from Cast Shadows](MidtermProject/README.md)
+
+Worth 20% of the final grade, and sitting chronologically between Homework 2 and Homework 3. A marble bust stands inside a 200 mm wireframe cube while a rod in front of a parallel light casts a thin red shadow plane that sweeps across the scene — 55 frames, one step each. Reconstruct the bust in 3D from that sweep alone.
+
+A single photo cannot give depth, because every pixel is a ray the object could sit anywhere along. Here the missing constraint comes from the light: **every lit point lies on the shadow plane**, so the camera ray and the plane meet at exactly one point. That is **structured-light triangulation**. The elegant part is that no camera calibration is needed at all — the stripe always crosses four bars of the cube, those four crossings are the corners of a known 200 mm square, and a per-frame **homography** (Homework 2's tool again) lifts each image directly into real millimetres on the plane. Every frame recalibrates itself.
+
+📄 **[Read the full write-up →](MidtermProject/README.md)**
+
+The 55 stacked contours give **4,046 points**, within a mean **1.70 mm** of the ground-truth mesh — 0.85% of the 200 mm working volume, from nothing but shadow edges and a wireframe.
+
+| Input — frame 0 | frame 27 | frame 54 |
+|---|---|---|
+| ![Frame 0000](MidtermProject/ShadowStrip/0000.jpg) | ![Frame 0027](MidtermProject/ShadowStrip/0027.jpg) | ![Frame 0054](MidtermProject/ShadowStrip/0054.jpg) |
+
+Ground-truth mesh beside the reconstruction — recognisable head-on, and revealed as a stack of 55 plane sections the moment it is turned:
+
+![Ground truth beside the reconstructed point cloud](MidtermProject/groundTruth_vs_pointCloudResult.png)
+
+---
+
 ## Tooling
 
 Python, in Jupyter notebooks, using **NumPy** (matrix maths), **OpenCV** (`opencv-python`, for image I/O and drawing) and **Matplotlib** (inline display).
@@ -76,4 +98,4 @@ Python, in Jupyter notebooks, using **NumPy** (matrix maths), **OpenCV** (`openc
 pip install numpy opencv-python matplotlib
 ```
 
-Two external tools appear alongside: **MeshLab** in Homework 3, to pick 3D vertex coordinates off the scan and to view the resulting coloured point cloud, and **Blender** in Homework 4, which rendered the input image and is included as a reference scene.
+A few external tools appear alongside: **MeshLab** in Homework 3, to pick 3D vertex coordinates off the scan and to view the resulting coloured point cloud; **Blender** in Homework 4, which rendered the input image and is included as a reference scene; and **CloudCompare** in the midterm, to measure the reconstruction against the ground-truth mesh.
